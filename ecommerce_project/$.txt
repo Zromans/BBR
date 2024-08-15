@@ -1,0 +1,16 @@
+from django.core.management.base import BaseCommand
+from scraping.scraper import scrape_product
+
+class Command(BaseCommand):
+    help = 'Scrapes a product from a given URL'
+
+    def add_arguments(self, parser):
+        parser.add_argument('url', type=str, help='The URL of the product to scrape')
+
+    def handle(self, *args, **options):
+        url = options['url']
+        product, created = scrape_product(url)
+        if created:
+            self.stdout.write(self.style.SUCCESS(f'Successfully scraped new product: {product.name}'))
+        else:
+            self.stdout.write(self.style.SUCCESS(f'Successfully updated product: {product.name}'))
