@@ -1,0 +1,41 @@
+  /* bbr/static/css/styles.css */
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+  }
+
+  .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+  }
+
+  .search-form {
+      margin-bottom: 20px;
+  }
+
+  .filter-form {
+      margin-bottom: 20px;
+  }
+
+  .part-card {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 20px;
+  }
+
+  .part-card h3 {
+      margin-top: 0;
+  }
+
+  .part-card p {
+      margin-bottom: 10px;
+  }
+
+  .part-card .price {
+      font-weight: bold;
+      color: #007bff;
+  }

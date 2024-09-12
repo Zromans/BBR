@@ -4,43 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Changes</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
-        .item { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; }
-        .diff { color: #e74c3c; }
-        .new { color: #2ecc71; }
-    </style>
+    <!-- Add any necessary CSS stylesheets -->
 </head>
 <body>
     <h1>Review Changes</h1>
-    <form method="post">
-        {% csrf_token %}
-        {% for change in changes %}
-            <div class="item">
-                <h3>{{ change.new_data.name }}</h3>
-                <p>URL: {{ change.new_data.url }}</p>
-                {% if change.old_data %}
-                    <p>Price: <span class="diff">{{ change.old_data.price }}</span> -> <span class="new">{{ change.new_data.price }}</span> (<span class="diff">{{ change.differences.price_diff }}%</span>)</p>
-                    <p>Stock: <span class="diff">{{ change.old_data.stock }}</span> -> <span class="new">{{ change.new_data.stock }}</span> (<span class="diff">{{ change.differences.stock_diff }}%</span>)</p>
-                    <p>Description Difference: <span class="diff">{{ change.differences.description_diff }}%</span></p>
-                    <details>
-                        <summary>View Descriptions</summary>
-                        <p><strong>Old:</strong> {{ change.old_data.description }}</p>
-                        <p><strong>New:</strong> {{ change.new_data.description }}</p>
-                    </details>
-                {% else %}
-                    <p class="new">New Product</p>
-                    <p>Price: {{ change.new_data.price }}</p>
-                    <p>Stock: {{ change.new_data.stock }}</p>
-                    <p>Description: {{ change.new_data.description }}</p>
-                {% endif %}
-                <label>
-                    <input type="checkbox" name="approve" value="{{ change.new_data.id }}"> Approve
-                </label>
-            </div>
-        {% endfor %}
-        <input type="submit" value="Submit Approvals">
-    </form>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if changes %}
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Fitments</th>
+                        <th>Brand</th>
+                        <th>Manufacturer Part Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for change in changes %}
+                        <tr>
+                            <td>{{ change.new_data.url }}</td>
+                            <td>{{ change.new_data.name }}</td>
+                            <td>
+                                {% if change.differences.price %}
+                                    <span style="color: red;">{{ change.differences.price.new }}</span>
+                                    <br>
+                                    <span style="color: gray;">(Old: {{ change.differences.price.old }})</span>
+                                {% else %}
+                                    {{ change.new_data.price }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if change.differences.description %}
+                                    <span style="color: red;">Description changed</span>
+                                {% else %}
+                                    No change
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if change.differences.fitments %}
+                                    <span style="color: red;">{{ change.differences.fitments.new }}</span>
+                                    <br>
+                                    <span style="color: gray;">(Old: {{ change.differences.fitments.old }})</span>
+                                {% else %}
+                                    {{ change.new_data.fitments }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if change.differences.brand %}
+                                    <span style="color: red;">{{ change.differences.brand.new }}</span>
+                                    <br>
+                                    <span style="color: gray;">(Old: {{ change.differences.brand.old }})</span>
+                                {% else %}
+                                    {{ change.new_data.brand }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if change.differences.manufacturer_part_number %}
+                                    <span style="color: red;">{{ change.differences.manufacturer_part_number.new }}</span>
+                                    <br>
+                                    <span style="color: gray;">(Old: {{ change.differences.manufacturer_part_number.old }})</span>
+                                {% else %}
+                                    {{ change.new_data.manufacturer_part_number }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <input type="checkbox" name="approve" value="{{ change.new_data.id }}"> Approve
+                                <input type="checkbox" name="reject" value="{{ change.new_data.id }}"> Reject
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
+    {% else %}
+        <p>No changes to review.</p>
+    {% endif %}
 </body>
-</html>t type="submit" value="Submit Approvals">
-</form>
+</html>

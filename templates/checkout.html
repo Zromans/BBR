@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Checkout{% endblock %}
+
+{% block content %}
+<h1>Checkout</h1>
+
+<form action="{% url 'place_order' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Full Name:</label>
+        <input type="text" name="name" id="name" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required>
+    </div>
+    <div class="form-group">
+        <label for="address">Shipping Address:</label>
+        <textarea name="address" id="address" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="payment_method">Payment Method:</label>
+        <select name="payment_method" id="payment_method" required>
+            <option value="">Select Payment Method</option>
+            <option value="credit_card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+        </select>
+    </div>
+    <button type="submit" class="btn">Place Order</button>
+</form>
+{% endblock %}

@@ -1,10 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Parts List</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
     <h1>Parts List</h1>
-    <!-- Add more content here -->
-</body>
-</html>
+
+    <form class="search-form" method="GET">
+      {{ search_form.as_p }}
+      <button type="submit">Search</button>
+    </form>
+
+    <form class="filter-form" method="GET">
+      {{ filter_form.as_p }}
+      <button type="submit">Filter</button>
+    </form>
+
+    {% if parts %}
+      <div class="row">
+        {% for part in parts %}
+          <div class="col-md-4">
+            <div class="part-card">
+              <h3>{{ part.name }}</h3>
+              <p>Make: {{ part.make.name }}</p>
+              <p>Model: {{ part.model.name }}</p>
+              <p>Year: {{ part.year.year }}</p>
+              <p>Category: {{ part.category.name }}</p>
+              <p class="price">Price: ${{ part.price }}</p>
+              <a href="{% url 'parts:detail' part.pk %}" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="pagination">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">« Previous</a>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="current-page">{{ num }}</span>
+            {% else %}
+              <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next »</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p>No parts found.</p>
+    {% endif %}
+  </div>
+{% endblock %}

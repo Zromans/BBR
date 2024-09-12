@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraping App</title>
+    <!-- Add any necessary CSS stylesheets -->
+</head>
+<body>
+    <h1>Welcome to the Scraping App</h1>
+    
+    <h2>Latest Scraped Data</h2>
+    {% if scraped_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>SKU</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in scraped_data %}
+                    <tr>
+                        <td>{{ data.url }}</td>
+                        <td>{{ data.name }}</td>
+                        <td>{{ data.price }}</td>
+                        <td>{{ data.sku }}</td>
+                        <td>{{ data.timestamp }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No scraped data available.</p>
+    {% endif %}
+    
+    <h2>Actions</h2>
+    <ul>
+        <li><a href="{% url 'review_changes' %}">Review Changes</a></li>
+        <li><a href="{% url 'run_scraper' %}">Run Scraper</a></li>
+    </ul>
+</body>
+</html>

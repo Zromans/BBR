@@ -1,0 +1,171 @@
+.product-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+
+.product-detail img {
+    max-width: 50%;
+    margin-right: 20px;
+}
+
+.product-detail h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.product-detail p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.form-group select,
+.form-
+body {
+    background-color: #1c1c1c;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    background-color: #000;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+}
+
+.nav-menu li {
+    margin-left: 20px;
+}
+
+.nav-menu li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.hero {
+    background-image: url("{% static 'images/hero-background.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff0000;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 4px;
+}
+
+.featured-products,
+.flash-sales {
+    padding: 50px 0;
+}
+
+.featured-products h2,
+.flash-sales h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.product-item {
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.product-item img {
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.product-item h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.product-item p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.flash-sale-item {
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.flash-sale-item h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.flash-sale-item p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+.tachometer {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.tachometer img {
+    max-width: 100%;
+}
+
+
+.footer {
+    background-color: #000;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}

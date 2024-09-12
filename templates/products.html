@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Products{% endblock %}
+
+{% block content %}
+<h1>Our Products</h1>
+
+<form action="{% url 'products' %}" method="get" class="search-form">
+    <input type="text" name="search" placeholder="Search products..." value="{{ search_query }}">
+    <button type="submit">Search</button>
+</form>
+
+<div class="product-list">
+    {% for product in products %}
+    <div class="product-item">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h3><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+        <p>Price: ${{ product.price }}</p>
+        <a href="{% url 'add_to_cart' product.id %}" class="btn">Add to Cart</a>
+    </div>
+    {% empty %}
+    <p>No products found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

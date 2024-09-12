@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BBR Parts{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block styles %}{% endblock %}
+<head>
+    ...
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    ...
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'products' %}">Products</a></li>
+                <li><a href="{% url 'flash_sales' %}">Flash Sales</a></li>
+                <li><a href="{% url 'cart' %}">Cart</a></li>
+                <li><a href="{% url 'account' %}">Account</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 BBR Parts. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

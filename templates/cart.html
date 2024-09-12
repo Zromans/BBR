@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Cart{% endblock %}
+
+{% block content %}
+<h1>Shopping Cart</h1>
+
+{% if cart_items %}
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>${{ item.product.price }}</td>
+            <td>
+                <form action="{% url 'update_cart' item.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+            <td>${{ item.total_price }}</td>
+            <td>
+                <form action="{% url 'remove_from_cart' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total:</td>
+            <td>${{ cart_total }}</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+<a href="{% url 'checkout' %}" class="btn">Proceed to Checkout</a>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'parts:list' %}">Parts</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'parts:by_make' make.name %}">{{ make.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ model.name }}</li>
+  </ol>
+</nav>

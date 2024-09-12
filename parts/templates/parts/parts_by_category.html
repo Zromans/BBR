@@ -1,0 +1,11 @@
+
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+
+def parts_detail(request, pk):
+    try:
+        part = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        raise Http404("Part does not exist")
+    context = {'part': part}
+    return render(request, 'parts/parts_detail.html', context)

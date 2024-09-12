@@ -1,0 +1,79 @@
+the templates/products directory:
+
+product_list.css:
+
+Styles for the product listing page
+Grid or list layout for displaying products
+Product item styling (e.g., borders, padding, margins)
+Product image sizing and positioning
+Product name and price styling
+product_detail.css:
+
+Styles for the product detail page
+Product image gallery or carousel
+Product title, price, and description styling
+Add to cart button styling
+Related products section styling
+category_list.css:
+
+Styles for the category listing page
+Category item styling (e.g., borders, padding, margins)
+Category name and description styling
+Category image sizing and positioning
+category_detail.css:
+
+Styles for the category detail page
+Product grid or list layout within the category
+Category title and description styling
+Subcategory or filter section styling
+search_results.css:
+
+Styles for the search results page
+Search result item styling (e.g., borders, padding, margins)
+Search query highlighting
+No results message styling
+cart.css:
+
+Styles for the shopping cart page
+Cart item table or list styling
+Product name, price, quantity, and total styling
+Update quantity and remove item button styling
+Cart total and checkout button styling
+checkout.css:
+
+Styles for the checkout page
+Form field styling (e.g., labels, inputs, textareas)
+Form validation error message styling
+Order summary section styling
+Place order button styling
+order_confirmation.css:
+
+Styles for the order confirmation page
+Order details section styling
+Order number and total amount styling
+Thank you message styling
+Continue shopping button styling
+product_filters.css:
+
+Styles for product filtering functionality
+Filter checkbox or radio button styling
+Filter label and count styling
+Active filter indication styling
+product_sorting.css:
+
+Styles for product sorting functionality
+Sort option select or radio button styling
+Selected sort option indication styling
+product_pagination.css:
+
+Styles for product pagination
+Pagination link styling
+Active page indication styling
+Previous and next page button styling
+product_reviews.css:
+
+Styles for product reviews section
+Review item styling (e.g., borders, padding, margins)
+Review author, rating, and date styling
+Review text styling
+Write review form styling

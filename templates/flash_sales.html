@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Flash Sales</h1>
+    <div class="flash-sales-list">
+        {% for sale in flash_sales %}
+        <div class="flash-sale-item">
+            <h2>{{ sale.name }}</h2>
+            <p>Discount: {{ sale.discount }}%</p>
+            <p>End Date: {{ sale.end_date }}</p>
+            <a href="{% url 'flash_sale_detail' sale.id %}" class="btn">Shop Now</a>
+        </div>
+        {% empty %}
+        <p>No active flash sales at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block title %}BBR Parts - Flash Sales{% endblock %}
+
+{% block content %}
+<h1>Flash Sales</h1>
+
+<div class="flash-sales-list">
+    {% for sale in flash_sales %}
+    <div class="flash-sale-item">
+        <h2>{{ sale.name }}</h2>
+        <p>Discount: {{ sale.discount }}%</p>
+        <p>End Date: {{ sale.end_date }}</p>
+        <a href="{% url 'flash_sale_detail' sale.id %}" class="btn">Shop Now</a>
+    </div>
+    {% empty %}
+    <p>No active flash sales at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

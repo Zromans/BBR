@@ -13,9 +13,7 @@ SPIDER_MODULES = ["eccpp_crawler.spiders"]
 NEWSPIDER_MODULE = "eccpp_crawler.spiders"
 
 
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "eccpp_crawler (+http://www.yourdomain.com)"
-
+# Crawl responsibly by identifying yourself (and your
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
@@ -91,3 +89,7 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+# bbr/settings.py
+
+

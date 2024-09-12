@@ -1,0 +1,92 @@
+# dynamic_apps.py
+
+from django.apps import AppConfig, apps
+from django.conf import settings
+from django.db.models.signals import post_save
+
+# Custom app config classes for each app
+class ProductsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'products'
+
+    def ready(self):
+        from .models import Product
+        from .signals import update_product_price
+
+        # Connect signals
+        post_save.connect(update_product_price, sender=Product)
+
+class UsersConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'users'
+
+    def ready(self):
+        # Perform any necessary initializations or configurations for the users app
+        pass
+
+class OrdersConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'orders'
+
+    def ready(self):
+        # Perform any necessary initializations or configurations for the orders app
+        pass
+
+class ReviewsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'reviews'
+
+    def ready(self):
+        # Perform any necessary initializations or configurations for the reviews app
+        pass
+
+class NotificationsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'notifications'
+
+    def ready(self):
+        # Perform any necessary initializations or configurations for the notifications app
+        pass
+
+# Update INSTALLED_APPS setting
+INSTALLED_APPS = [
+    # ...
+    'products.apps.ProductsConfig',
+    'users.apps.UsersConfig',
+    'orders.apps.OrdersConfig',
+    'reviews.apps.ReviewsConfig',
+    'notifications.apps.NotificationsConfig',
+    # ...
+]
+
+# Dynamically retrieve and manipulate installed apps
+def dynamic_app_configuration():
+    # Retrieve a specific app configuration
+    products_app = apps.get_app_config('products')
+
+    # Perform actions based on app configurations
+    for app_config in apps.get_app_configs():
+        if app_config.name.startswith('custom_'):
+            # Perform specific actions for custom apps
+            pass
+
+# App-specific configurations
+PRODUCTS_PER_PAGE = 20
+PRODUCT_IMAGE_UPLOAD_PATH = 'product_images/'
+
+# Update app config classes with app-specific configurations
+class ProductsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'products'
+
+    def ready(self):
+        from .models import Product
+        from .signals import update_product_price
+
+        # Connect signals
+        post_save.connect(update_product_price, sender=Product)
+
+        # Use app-specific configurations
+        products_per_page = PRODUCTS_PER_PAGE
+        product_image_upload_path = PRODUCT_IMAGE_UPLOAD_PATH
+

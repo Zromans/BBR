@@ -1,14 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Welcome to Our E-commerce Site</title>
-</head>
-<body>
-    <h1>Welcome to Our E-commerce Site</h1>
-    <p>This is the homepage of our site.</p>
-    <ul>
-        <li><a href="{% url 'inventory:list' %}">View Inventory</a></li>
-        <li><a href="{% url 'parts:list' %}">View Parts</a></li>
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Welcome to BBR Parts</h1>
+    <p>Discover high-performance auto parts for your vehicle.</p>
+    <a href="{% url 'products' %}" class="btn">Shop Now</a>
+</section>
+<div class="tachometer">
+    <img src="{% static 'images/tachometer.png' %}" alt="Tachometer">
+</div>
+
+<section class="featured-products">
+    <h2>Featured Products</h2>
+    <!-- Display featured products -->
+</section>
+
+<section class="flash-sales">
+    <h2>Flash Sales</h2>
+    <!-- Display current flash sales or promotions -->
+</section>
+{% endblock %}
