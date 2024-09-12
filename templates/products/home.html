@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Home{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Welcome to BBR Parts</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">${{ product.price }}</p>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h2>Start Scraping</h2>
+        <button id="start-scrape-btn" class="btn btn-primary">Start Scraping</button>
+        <div id="scrape-status"></div>
+
+        <h2 class="mt-4">Import from FTP</h2>
+        <form action="{% url 'import_ftp' %}" method="post" class="ftp-form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="ftp_host" class="form-label">FTP Host:</label>
+                <input type="text" name="ftp_host" id="ftp_host" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ftp_user" class="form-label">FTP Username:</label>
+                <input type="text" name="ftp_user" id="ftp_user" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ftp_pass" class="form-label">FTP Password:</label>
+                <input type="password" name="ftp_pass" id="ftp_pass" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ftp_path" class="form-label">FTP Path:</label>
+                <input type="text" name="ftp_path" id="ftp_path" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Import from FTP</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('start-scrape-btn').addEventListener('click', function() {
+        fetch('{% url "start_scrape" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('scrape-status').textContent = data.message;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Order History{% endblock %}
+
+{% block content %}
+<h1>Order History</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at|date:"F d, Y" }}</td>
+            <td>${{ order.total_price }}</td>
+            <td>{{ order.status }}</td>
+            <td><a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-info">View Details</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No orders found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

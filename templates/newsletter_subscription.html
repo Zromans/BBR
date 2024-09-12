@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Newsletter Subscription{% endblock %}
+
+{% block content %}
+<h1>Subscribe to Our Newsletter</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Subscribe</button>
+</form>
+{% endblock %}

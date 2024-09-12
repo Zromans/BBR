@@ -1,4 +1,5 @@
 from django import forms
+from products.models import Make, Model, Year, Category
 
 class PartsSearchForm(forms.Form):
     query = forms.CharField(label='Search', required=False)

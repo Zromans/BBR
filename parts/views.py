@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import Product, Make, Model, Year, Category
+from products.models import Product, Make, Model, Year, Category
 from .forms import PartsSearchForm, PartsFilterForm
 
 def parts_list(request):

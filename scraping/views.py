@@ -46,3 +46,4 @@ def review_changes(request):
         'has_changes': bool(changes),
     }
     return render(request, 'scraping/review_changes.html', context)
+

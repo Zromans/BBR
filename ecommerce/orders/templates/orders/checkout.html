@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Checkout</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h3>Your Cart</h3>
+    <ul>
+    {% for item in cart %}
+        <li>{{ item.product.name }} - Quantity: {{ item.quantity }} - Price: ${{ item.total_price }}</li>
+    {% endfor %}
+    </ul>
+    <p>Total: ${{ cart.get_total_price }}</p>
+    <button type="submit">Place Order</button>
+</form>
+{% endblock %}

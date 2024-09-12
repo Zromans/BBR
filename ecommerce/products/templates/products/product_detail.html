@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ product.name }}</h2>
+<p>Price: ${{ product.price }}</p>
+<p>Category: {{ product.category.name }}</p>
+<p>Stock: {{ product.stock }}</p>
+{% if product.image %}
+<img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 400px;">
+{% endif %}
+<p>{{ product.description }}</p>
+
+{% if user.is_staff %}
+<h3>Update Stock</h3>
+<form method="post" action="{% url 'update_stock' product.id %}">
+    {% csrf_token %}
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" required>
+    <label for="reason">Reason:</label>
+    <input type="text" name="reason" id="reason" required>
+    <button type="submit">Update Stock</button>
+</form>
+<p><a href="{% url 'edit_product' product.slug %}">Edit Product</a></p>
+<p><a href="{% url 'delete_product' product.slug %}">Delete Product</a></p>
+{% endif %}
+
+<form method="post" action="{% url 'add_to_cart' product.id %}">
+    {% csrf_token %}
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}">
+    <button type="submit">Add to Cart</button>
+</form>
+{% endblock %}

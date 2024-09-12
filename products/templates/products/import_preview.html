@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Import Preview</h2>
+<form method="post" action="{% url 'save_imported_products' %}">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>SKU</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td><input type="text" name="name_{{ forloop.counter }}" value="{{ product.name }}"></td>
+                <td><input type="number" name="price_{{ forloop.counter }}" value="{{ product.price }}"></td>
+                <td><input type="text" name="sku_{{ forloop.counter }}" value="{{ product.sku }}"></td>
+                <td><input type="number" name="stock_{{ forloop.counter }}" value="{{ product.stock }}"></td>
+                <td><input type="text" name="category_{{ forloop.counter }}" value="{{ product.category }}"></td>
+                <td>
+                    {% if product.image_url %}
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" style="max-width: 100px;">
+                    {% else %}
+                    <input type="file" name="image_{{ forloop.counter }}">
+                    {% endif %}
+                </td>
+                <td>
+                    <button type="button" onclick="removeProduct(this)">Remove</button>
+                </td>
+            </tr>
+            <input type="hidden" name="products" value="{{ product }}">
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Import Products</button>
+</form>
+
+<script>
+function removeProduct(button) {
+    var row = button.closest('tr');
+    row.remove();
+}
+</script>
+{% endblock %}

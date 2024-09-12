@@ -16,9 +16,10 @@ class EccppSpiderSpider(scrapy.Spider):
     start_urls = ["https://eccppautoparts.com"]
 
     def __init__(self, *args, **kwargs):
-        super(EccppSpiderSpider, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.url = kwargs.get('url') or ''
         chrome_options = Options()
-        chrome_options.add_argument("--headless")  # Run in headless mode
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
@@ -28,22 +29,15 @@ class EccppSpiderSpider(scrapy.Spider):
 
     def login(self, response):
         self.driver.get(self.login_url)
-        
-        # Wait for the email input field to be present
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.NAME, "customer[email]"))
         )
         email_input.send_keys("zachary@bbrparts.com")
-        
         password_input = self.driver.find_element(By.NAME, "customer[password]")
         password_input.send_keys("@Rion62177")
-        
         login_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Sign In')]")
         login_button.click()
-        
-        # Wait for login to complete
         time.sleep(5)
-        
         if "My Account" in self.driver.page_source:
             self.logger.info("Login successful")
             yield scrapy.Request(self.start_urls[0], callback=self.parse_categories, dont_filter=True)
@@ -52,36 +46,27 @@ class EccppSpiderSpider(scrapy.Spider):
 
     def parse_categories(self, response):
         self.driver.get(response.url)
-        
-        # Wait for category links to be present
         category_links = WebDriverWait(self.driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a.category-link"))
         )
-        
         for link in category_links:
             category_url = link.get_attribute('href')
             yield scrapy.Request(category_url, callback=self.parse_category, dont_filter=True)
 
     def parse_category(self, response):
         self.driver.get(response.url)
-        
-        # Wait for product links to be present
         product_links = WebDriverWait(self.driver, 10).until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a.product-link"))
         )
-        
         for link in product_links:
             product_url = link.get_attribute('href')
             yield scrapy.Request(product_url, callback=self.parse_product, dont_filter=True)
 
     def parse_product(self, response):
         self.driver.get(response.url)
-        
-        # Wait for product details to be present
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "h1.product-title"))
         )
-        
         yield {
             'name': self.driver.find_element(By.CSS_SELECTOR, "h1.product-title").text,
             'price': self.driver.find_element(By.CSS_SELECTOR, "span.price").text,

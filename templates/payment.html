@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Payment{% endblock %}
+
+{% block content %}
+<h1>Payment</h1>
+<div class="order-summary">
+    <h2>Order Summary</h2>
+    <table class="table">
+        <tr>
+            <td>Subtotal:</td>
+            <td>${{ order.subtotal }}</td>
+        </tr>
+        <tr>
+            <td>Shipping:</td>
+            <td>${{ order.shipping_cost }}</td>
+        </tr>
+        <tr>
+            <td>Tax:</td>
+            <td>${{ order.tax }}</td>
+        </tr>
+        <tr>
+            <th>Total:</th>
+            <th>${{ order.total }}</th>
+        </tr>
+    </table>
+</div>
+<form id="payment-form" method="post" action="{% url 'process_payment' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="card-number">Card Number:</label>
+        <input type="text" id="card-number" name="card_number" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="expiry-date">Expiry Date:</label>
+        <input type="text" id="expiry-date" name="expiry_date" placeholder="MM/YY" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="name-on-card">Name on Card:</label>
+        <input type="text" id="name-on-card" name="name_on_card" class="form-control" required>
+    </div>
+    <input type="hidden" name="order_id" value="{{ order.id }}">
+    <button type="submit" class="btn btn-primary">Pay Now</button>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/payment.js' %}"></script>
+{% endblock %}

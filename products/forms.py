@@ -39,7 +39,7 @@ class ProductSearchForm(forms.Form):
         super().__init__(*args, **kwargs)
         if 'make' in self.data:
             try:
-                make_id = int(self.data.get('make'))
+                make_id = int(self.data.get('make', 0))
                 self.fields['model'].queryset = Model.objects.filter(make_id=make_id).order_by('name')
             except (ValueError, TypeError):
                 pass
@@ -78,3 +78,15 @@ class ProductSearchForm(forms.Form):
             products = products.filter(price__lte=max_price)
 
         return products
+
+class ProductImportForm(forms.Form):
+    file = forms.FileField(
+        label='CSV File',
+        help_text='Upload a CSV file containing product data.'
+    )
+
+    def clean_file(self):
+        file = self.cleaned_data['file']
+        if not file.name.endswith('.csv'):
+            raise forms.ValidationError('File must be a CSV.')
+        return file

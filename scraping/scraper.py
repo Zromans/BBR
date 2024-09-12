@@ -3,18 +3,21 @@ import logging
 from decimal import Decimal
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from .models import ScrapedData
+from django.apps import apps
 from .config import ECCPP_PRODUCTS_FILE
-from .spiders.eccpp_spider import EccppSpiderSpider
 
 logger = logging.getLogger(__name__)
 
+def get_scraped_data_model():
+    return apps.get_model('scraping', 'ScrapedData')
+
 def run_scraper():
     process = CrawlerProcess(get_project_settings())
-    process.crawl(EccppSpiderSpider)
+    process.crawl('eccpp_spider')
     process.start()
 
 def import_scraped_data():
+    ScrapedData = get_scraped_data_model()
     try:
         with open(ECCPP_PRODUCTS_FILE, 'r') as file:
             data = json.load(file)

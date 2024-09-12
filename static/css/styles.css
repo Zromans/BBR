@@ -1,9 +1,9 @@
-  /* bbr/static/css/styles.css */
-
+  /* Main styles */
   body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #f4f4f4;
   }
 
   .container {
@@ -12,30 +12,118 @@
       padding: 20px;
   }
 
-  .search-form {
+  /* Forms */
+  .search-form, .filter-form, .ftp-form {
       margin-bottom: 20px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
 
-  .filter-form {
-      margin-bottom: 20px;
-  }
-
+  /* Product cards */
   .part-card {
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 4px;
-      padding: 10px;
+      padding: 15px;
       margin-bottom: 20px;
+      background-color: #fff;
+      transition: box-shadow 0.3s ease;
+  }
+
+  .part-card:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   }
 
   .part-card h3 {
       margin-top: 0;
+      color: #333;
   }
 
   .part-card p {
       margin-bottom: 10px;
+      color: #666;
   }
 
   .part-card .price {
       font-weight: bold;
       color: #007bff;
+      font-size: 1.2em;
   }
+
+  /* Total sales display */
+  .total-sales-display {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      background-color: #e9ecef;
+      padding: 10px;
+      border-radius: 5px;
+  }
+
+  .total-sales-display .currency-symbol {
+      font-size: 0.6em;
+      margin-right: 5px;
+      color: #28a745;
+  }
+
+  /* Flash sales */
+  .flash-sale-item {
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+      .container {
+          padding: 10px;
+      }
+    
+      .part-card {
+          padding: 10px;
+      }
+  }
+
+.error-container {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.error-container h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.error-image {
+    max-width: 200px;
+    margin: 20px 0;
+}
+
+.error-container p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.error-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.error-container ul li {
+    margin: 10px 0;
+}
+
+.error-container ul li a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.error-container ul li a:hover {
+    text-decoration: underline;
+}

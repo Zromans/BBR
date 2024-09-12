@@ -1,34 +1,23 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="container">
-    <h1>Flash Sales</h1>
-    <div class="flash-sales-list">
-        {% for sale in flash_sales %}
-        <div class="flash-sale-item">
-            <h2>{{ sale.name }}</h2>
-            <p>Discount: {{ sale.discount }}%</p>
-            <p>End Date: {{ sale.end_date }}</p>
-            <a href="{% url 'flash_sale_detail' sale.id %}" class="btn">Shop Now</a>
-        </div>
-        {% empty %}
-        <p>No active flash sales at the moment.</p>
-        {% endfor %}
-    </div>
-</div>
-{% endblock %}
 {% block title %}BBR Parts - Flash Sales{% endblock %}
 
 {% block content %}
 <h1>Flash Sales</h1>
 
-<div class="flash-sales-list">
+<div class="row">
     {% for sale in flash_sales %}
-    <div class="flash-sale-item">
-        <h2>{{ sale.name }}</h2>
-        <p>Discount: {{ sale.discount }}%</p>
-        <p>End Date: {{ sale.end_date }}</p>
-        <a href="{% url 'flash_sale_detail' sale.id %}" class="btn">Shop Now</a>
+    <div class="col-md-4 mb-4">
+        <div class="card flash-sale-item">
+            <div class="card-body">
+                <h5 class="card-title">{{ sale.product.name }}</h5>
+                <p class="card-text">Original Price: <strike>${{ sale.product.original_price }}</strike></p>
+                <p class="card-text">Sale Price: <strong>${{ sale.product.sale_price }}</strong></p>
+                <p class="card-text">Discount: {{ sale.discount }}% off</p>
+                <p class="card-text">Ends: {{ sale.end_date|date:"F d, Y H:i" }}</p>
+                <a href="{% url 'product_detail' sale.product.id %}" class="btn btn-primary">View Product</a>
+            </div>
+        </div>
     </div>
     {% empty %}
     <p>No active flash sales at the moment.</p>

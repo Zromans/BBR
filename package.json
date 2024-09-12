@@ -1,16 +1,30 @@
 {
   "name": "bbr",
   "version": "1.0.0",
-  "description": "",
+  "description": "BBR E-commerce Project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "axios": "^0.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2",
+    "jest": "^27.0.6",
+    "eslint": "^7.29.0"
   }
 }

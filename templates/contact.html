@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Contact Us{% endblock %}
+
+{% block content %}
+<h1>Contact Us</h1>
+<form method="post" action="{% url 'contact' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="question">Question:</label>
+        <textarea id="question" name="question" class="form-control" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

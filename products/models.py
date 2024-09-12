@@ -1,4 +1,13 @@
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Year(models.Model):
     year = models.IntegerField(unique=True)
@@ -20,88 +29,103 @@ class Model(models.Model):
         unique_together = ('name', 'make')
 
     def __str__(self):
-        return f"{self.make} {self.name}"
+        return f"{self.make.name} {self.name}"
 
 class Product(models.Model):
+    stock = models.PositiveIntegerField(default=0)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.URLField(blank=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    sku = models.CharField(max_length=50, unique=True)
+    stock = models.IntegerField(default=0)
+    category = models.CharField(max_length=100)
+    scraped_at = models.DateTimeField(default=timezone.now)
     years = models.ManyToManyField(Year, related_name='products')
     makes = models.ManyToManyField(Make, related_name='products')
     models = models.ManyToManyField(Model, related_name='products')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return self.name
 
-                product.product_models.add(model)
+    def is_available(self):
+        return self.stock > 0
 
-                scraped_data.append({
-                    'name': name,
-                    'price': price,
-                    'year': year_str,
-                    'make': make_str,
-                    'model': model_str,
-                    'image_url': image_url
-                })
+    def get_availability_status(self):
+        if self.stock > 10:
+            return "In Stock"
+        elif 0 < self.stock <= 10:
+            return "Low Stock"
+        else:
+            return "Out of Stock"
 
-            self.stdout.write(self.style.SUCCESS(f'Scraped page {page} of {num_pages}'))
-            time.sleep(delay)
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_activity = models.DateTimeField(auto_now=True)
 
-        return scraped_data
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
-    def identify_products(self, soup):
-        products = []
-        for element in soup.find_all():
-            text = element.get_text(strip=True)
-            if self.predict_product(text):
-                products.append(element)
-        return products
+class ShippingOption(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def predict_product(self, text):
-        if self.ml_model is None or self.vectorizer is None:
-            raise ValueError('Machine learning model or vectorizer not loaded')
+# ... existing imports and models ...
 
-        text_vector = self.vectorizer.transform([text])
-        prediction = self.ml_model.predict(text_vector)
-        return prediction[0]
+class Order(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(CartItem)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')
 
-    def extract_text(self, element, class_name):
-        text_element = element.find(class_=class_name)
-        if text_element:
-            return text_element.get_text(strip=True)
-        return ''
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username}"
 
-    def extract_price(self, element):
-        price_element = element.find(class_='price')
-        if price_element:
-            price_text = price_element.get_text(strip=True)
-            return float(price_text.replace('$', '').replace(',', ''))
-        return 0.0
+# ... existing imports and models ...
 
-    def extract_image_url(self, element):
-        image_element = element.find('img')
-        if image_element and 'src' in image_element.attrs:
-            return image_element['src']
-        return ''
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    address = models.CharField(max_length=200)
+    phone_number = models.CharField(max_length=20)
 
-    def save_to_csv(self, data, filename):
-        with open(filename, 'w', newline='') as csvfile:
-            fieldnames = ['name', 'price', 'year', 'make', 'model', 'image_url']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in data:
-                writer.writerow(row)
-        return filename
+    def __str__(self):
+        return self.user.username
 
-    def send_email_notification(self, csv_file):
-        subject = 'Product Scraping Complete'
-        message = f'The product scraping process has completed. The scraped data is attached as {csv_file}.'
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [settings.ADMIN_EMAIL]
-        attachments = [csv_file]
+# ... existing imports and models ...
 
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False, attachments=attachments)
-        self.stdout.write(self.style.SUCCESS('Email notification sent'))
+class Inventory(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Inventory for {self.product.name}"
+
+class FlashSale(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    discount_percentage = models.IntegerField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    initial_stock = models.IntegerField()
+    current_stock = models.IntegerField()
+
+    def is_active(self):
+        now = timezone.now()
+        return self.start_time <= now <= self.end_time and self.current_stock > 0
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    rating = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    moderated = models.BooleanField(default=False)
+    helpful_votes = models.IntegerField(default=0)
+    not_helpful_votes = models.IntegerField(default=0)

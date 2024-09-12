@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Search Results{% endblock %}
+
+{% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+
+<div class="main-result">
+    <h2>Main Result</h2>
+    {% if main_result %}
+    <div class="product-item">
+        <img src="{{ main_result.image.url }}" alt="{{ main_result.name }}">
+        <h3><a href="{% url 'product_detail' main_result.id %}">{{ main_result.name }}</a></h3>
+        <p>Price: ${{ main_result.price }}</p>
+        <a href="{% url 'add_to_cart' main_result.id %}" class="btn btn-primary">Add to Cart</a>
+    </div>
+    {% else %}
+    <p>No exact match found for "{{ query }}".</p>
+    {% endif %}
+</div>
+
+<div class="related-results">
+    <h2>Related Items</h2>
+    {% if related_results %}
+    <div class="product-list">
+        {% for product in related_results %}
+        <div class="product-item">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <h3><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+            <p>Price: ${{ product.price }}</p>
+            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No related items found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from scraper.spiders.product_spider import ProductSpider
+from .forms import CartAddProductForm
 from products.models import Product, ProductDetail
 import json
 from selenium import webdriver
@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import time
 from django.conf import settings
+from scraper.spiders.product_spider import ProductSpider
 
 class Command(BaseCommand):
     help = 'Scrape products from eccppautoparts.com'

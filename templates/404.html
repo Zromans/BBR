@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Page Not Found{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1>404 - Sorry, the power's off!</h1>
+    <img src="{% static 'images/power-off.svg' %}" alt="Power Off" class="error-image">
+    <p>Looks like we're experiencing a temporary power outage. The page you're looking for might be stuck in the dark.</p>
+    <p>While we work on getting the lights back on, why not try one of these:</p>
+    <ul>
+        <li><a href="{% url 'home' %}">Return to our homepage</a></li>
+        <li><a href="{% url 'products' %}">Browse our products</a></li>
+        <li><a href="{% url 'contact' %}">Contact our support team</a></li>
+    </ul>
+</div>
+{% endblock %}

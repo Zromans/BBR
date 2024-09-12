@@ -1,50 +1,195 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>BBR Home</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#scrape-button").click(function() {
-                $(this).prop('disabled', true);
-                $(this).text('Scraping...');
-                $.ajax({
-                    url: "{% url 'start_scrape' %}",
-                    method: 'POST',
-                    success: function(blob, status, xhr) {
-                        var filename = "";
-                        var disposition = xhr.getResponseHeader('Content-Disposition');
-                        if (disposition && disposition.indexOf('attachment') !== -1) {
-                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                            var matches = filenameRegex.exec(disposition);
-                            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                        }
-                        var a = document.createElement('a');
-                        var url = window.URL.createObjectURL(blob);
-                        a.href = url;
-                        a.download = filename;
-                        document.body.append(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        $("#scrape-button").prop('disabled', false);
-                        $("#scrape-button").text('Start Scrape');
-                    },
-                    error: function(xhr, status, error) {
-                        alert("An error occurred: " + error);
-                        $("#scrape-button").prop('disabled', false);
-                        $("#scrape-button").text('Start Scrape');
-                    }
-                });
-            });
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products' %}">
+                            <i class="fas fa-box"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cart' %}">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'checkout' %}">
+                            <i class="fas fa-cash-register"></i> Checkout
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flash_sales' %}">
+                            <i class="fas fa-bolt"></i> Flash Sales
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="scrape-button">
+                            <i class="fas fa-spider"></i> Start Scrape
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">BBR Dashboard</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Products</h5>
+                            <p class="card-text display-4">{{ total_products }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Sales</h5>
+                            <p class="card-text display-4">${{ total_sales }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Users</h5>
+                            <p class="card-text display-4">{{ active_users }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">Pending Orders</h5>
+                            <p class="card-text display-4">{{ pending_orders }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Recent Products
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                {% for product in recent_products %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ product.name }}
+                                    <span class="badge bg-primary rounded-pill">${{ product.price }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Latest Orders
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                {% for order in latest_orders %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Order #{{ order.id }}
+                                    <span class="badge bg-success rounded-pill">${{ order.total }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress" style="display: none;">
+                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+
+            <div id="success-alert" class="alert alert-success mt-3" style="display: none;">
+                Operation completed successfully!
+            </div>
+
+            <div id="error-alert" class="alert alert-danger mt-3" style="display: none;"></div>
+        </main>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $("#scrape-button").click(function(e) {
+            e.preventDefault();
+            startScrape();
         });
-    </script>
-</head>
-<body>
-    <h1>Welcome to BBR</h1>
-    
-    <button id="scrape-button">Start Scrape</button>
 
-    <!-- Your existing content here -->
+        function startScrape() {
+            $("#scrape-button").prop('disabled', true);
+            $(".progress").show();
+            
+            let progress = 0;
+            let progressInterval = setInterval(function() {
+                progress += 10;
+                if (progress <= 100) {
+                    $(".progress-bar").css("width", progress + "%").attr("aria-valuenow", progress).text(progress + "%");
+                } else {
+                    clearInterval(progressInterval);
+                }
+            }, 1000);
 
-</body>
-</html>
+            $.ajax({
+                url: "{% url 'start_scrape' %}",
+                method: 'POST',
+                success: function(blob, status, xhr) {
+                    clearInterval(progressInterval);
+                    $(".progress-bar").css("width", "100%").attr("aria-valuenow", 100).text("100%");
+                    
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = filename;
+                    document.body.append(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    $("#scrape-button").prop('disabled', false);
+                    $(".progress").hide();
+                    $("#success-alert").fadeIn().delay(3000).fadeOut();
+                },
+                error: function(xhr, status, error) {
+                    clearInterval(progressInterval);
+                    $(".progress").hide();
+                    $("#error-alert").text("An error occurred: " + error).fadeIn().delay(3000).fadeOut();
+                    $("#scrape-button").prop('disabled', false);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

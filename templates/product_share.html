@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - Share Product{% endblock %}
+
+{% block content %}
+<h1>Share {{ product.name }}</h1>
+<div class="social-share-buttons">
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-facebook">Share on Facebook</a>
+    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text=Check%20out%20this%20product%20from%20BBR%20Parts!" target="_blank" class="btn btn-twitter">Share on Twitter</a>
+    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ product.name }}&summary=Check%20out%20this%20product%20from%20BBR%20Parts!" target="_blank" class="btn btn-linkedin">Share on LinkedIn</a>
+</div>
+{% endblock %}

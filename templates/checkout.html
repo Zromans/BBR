@@ -7,26 +7,26 @@
 
 <form action="{% url 'place_order' %}" method="post">
     {% csrf_token %}
-    <div class="form-group">
-        <label for="name">Full Name:</label>
-        <input type="text" name="name" id="name" required>
+    <div class="mb-3">
+        <label for="name" class="form-label">Full Name:</label>
+        <input type="text" name="name" id="name" class="form-control" required>
     </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" name="email" id="email" class="form-control" required>
     </div>
-    <div class="form-group">
-        <label for="address">Shipping Address:</label>
-        <textarea name="address" id="address" required></textarea>
+    <div class="mb-3">
+        <label for="address" class="form-label">Shipping Address:</label>
+        <textarea name="address" id="address" class="form-control" required></textarea>
     </div>
-    <div class="form-group">
-        <label for="payment_method">Payment Method:</label>
-        <select name="payment_method" id="payment_method" required>
+    <div class="mb-3">
+        <label for="payment_method" class="form-label">Payment Method:</label>
+        <select name="payment_method" id="payment_method" class="form-select" required>
             <option value="">Select Payment Method</option>
             <option value="credit_card">Credit Card</option>
             <option value="paypal">PayPal</option>
         </select>
     </div>
-    <button type="submit" class="btn">Place Order</button>
+    <button type="submit" class="btn btn-primary">Place Order</button>
 </form>
 {% endblock %}

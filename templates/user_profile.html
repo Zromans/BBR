@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}BBR Parts - User Profile{% endblock %}
+
+{% block content %}
+<h1>User Profile</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" readonly class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" class="form-control">{{ user.userprofile.address }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="phone_number">Phone Number:</label>
+        <input type="tel" id="phone_number" name="phone_number" value="{{ user.userprofile.phone_number }}" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+{% endblock %}
